@@ -9,6 +9,6 @@ ADD target/yuoj-backend-gateway-0.0.1-SNAPSHOT.jar .
   
 # 暴露端口
 EXPOSE 8104
-  
+
 # 启动命令
 ENTRYPOINT ["java","-jar","/app/yuoj-backend-gateway-0.0.1-SNAPSHOT.jar","--spring.profiles.active=prod"]
