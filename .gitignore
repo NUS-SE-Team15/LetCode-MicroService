@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.mysql-data
+.nacos-data
+.rabbitmq-data
+.redis-data
