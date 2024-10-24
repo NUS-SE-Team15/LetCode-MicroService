@@ -5,21 +5,22 @@ spring:
   # 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysql:3306/yuoj
+    url: jdbc:mysql://127.0.0.1:3306/yuoj
     username: root
     password: 123456
   # Redis 配置
   redis:
     database: 1
-    host: redis
+    host: 127.0.0.1
     port: 6379
     timeout: 5000
+    password: 123456
   cloud:
     nacos:
       discovery:
-        server-addr: nacos:8848
+        server-addr: 127.0.0.1:8848
   rabbitmq:
-    host: rabbitmq
+    host: 127.0.0.1
     port: 5672
     password: guest
     username: guest
