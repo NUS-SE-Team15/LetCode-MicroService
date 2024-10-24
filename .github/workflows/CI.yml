@@ -63,7 +63,7 @@ jobs:
 
       # 执行 SQL 文件
       - name: Execute SQL file
-        run: mysql -h 127.0.0.1 -u root letcode < ${{ github.workspace }}/mysql-init/create_table.sql
+        run: mysql -h 127.0.0.1 -u root yuoj < ${{ github.workspace }}/mysql-init/create_table.sql
 
       # 设置 Redis 实例
       - name: Set up Redis
