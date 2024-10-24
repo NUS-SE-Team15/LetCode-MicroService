@@ -6,7 +6,7 @@ spring:
     name: yuoj-backend-user-service
   # ?? dev ??
   profiles:
-    active: prod
+    active: dev
   # ?? swagger3
   mvc:
     pathmatch:
