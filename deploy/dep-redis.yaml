@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  replicas: 1  # 单实例
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:latest  # 使用最新的 Redis 镜像
+          ports:
+            - containerPort: 6379  # Redis 默认端口
+          volumeMounts:
+            - name: redis-storage
+              mountPath: /data  # Redis 数据持久化路径
+      volumes:
+        - name: redis-storage
+          emptyDir: {}  # 临时存储，若需要持久化数据可以更改为 PersistentVolumeClaim
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  selector:
+    app: redis
+  ports:
+    - protocol: TCP
+      port: 6379       # 服务端口
+      targetPort: 6379  # Pod 内的端口
+  type: ClusterIP  # 默认服务类型

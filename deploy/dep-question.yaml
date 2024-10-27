@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: question
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: question
+  template:
+    metadata:
+      labels:
+        app: question
+    spec:
+      containers:
+        - name: yuoj-backend-question-service
+          image: lc-yuoj-backend-question-service  # 改成你的镜像名称
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8103  # 容器内部服务监听的端口
+          resources:
+            requests:
+              cpu: "10m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: question-service
+spec:
+  selector:
+    app: question
+  ports:
+    - protocol: TCP
+      port: 8103      # 外部暴露的端口
+      targetPort: 8103   # Pod 内的服务端口
+  type: ClusterIP        # 使用 NodePort 直接暴露端口

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      containers:
+        - name: yuoj-backend-user-service
+          image: lc-yuoj-backend-user-service  # 改成你的镜像名称
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8102  # 容器内部服务监听的端口
+          resources:
+            requests:
+              cpu: "10m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  selector:
+    app: user
+  ports:
+    - protocol: TCP
+      port: 8102       # 外部暴露的端口
+      targetPort: 8102   # Pod 内的服务端口
+  type: ClusterIP        # 使用 NodePort 直接暴露端口

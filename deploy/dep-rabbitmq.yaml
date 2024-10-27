@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:management  # 使用 RabbitMQ 带管理界面的镜像
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5672  # RabbitMQ 服务监听的端口
+            - containerPort: 15672  # RabbitMQ 管理界面的端口
+          resources:
+            requests:
+              cpu: "10m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+spec:
+  selector:
+    app: rabbitmq
+  ports:
+    - name: rabbitmq-port  # 添加端口名称
+      protocol: TCP
+      port: 5672           # 外部暴露的端口
+      targetPort: 5672     # Pod 内的服务端口
+    - name: rabbitmq-mgmt-port  # 添加管理端口名称
+      protocol: TCP
+      port: 15672           # 外部暴露的管理端口
+      targetPort: 15672     # Pod 内的管理端口
+  type: ClusterIP           # 使用 ClusterIP
