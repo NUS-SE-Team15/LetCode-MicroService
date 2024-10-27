@@ -1,0 +1,76 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - "main"
+  workflow_dispatch:
+
+jobs:
+  upload-to-s3:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v1
+        with:
+          java-version: '8'
+
+      # 关闭默认的 MySQL 服务（如果存在）
+      - name: Shutdown system MySQL service (if running)
+        run: sudo service mysql stop
+
+      # 设置 MySQL 实例，确保端口映射正确
+      - name: Set up MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql version: '8.0'
+          mysql root password: '123456'    # 使用提供的 MySQL root 密码
+          mysql database: 'letcode'
+          host port: 3306                  # 映射主机端口
+          container port: 3306             # 容器内的 MySQL 端口
+
+      # 增加等待时间，确保 MySQL 启动
+      - name: Wait for MySQL to start
+        run: sleep 10
+
+      # 设置 MYSQL_PWD 环境变量，避免命令行传递密码
+      - name: Set MYSQL_PWD environment variable
+        run: echo "MYSQL_PWD=$MYSQL_ROOT_PASSWORD" >> $GITHUB_ENV
+        env:
+          MYSQL_ROOT_PASSWORD: '123456'    # 使用提供的 MySQL root 密码
+
+      # 检查 MySQL 服务状态
+      - name: Check MySQL service status
+        run: mysqladmin -h 127.0.0.1 -u root ping
+
+      # 执行 SQL 文件
+      - name: Execute SQL file
+        run: mysql -h 127.0.0.1 -u root yuoj < ${{ github.workspace }}/mysql-init/create_table.sql
+
+      # 设置 Redis 实例，端口为 6379，密码为 123456
+      - name: Set up Redis
+        run: |
+          docker run -d \
+          -p 6379:6379 \
+          --name redis \
+          redis
+
+      # 增加等待时间，确保 Redis 启动
+      - name: Wait for Redis to start
+        run: sleep 10
+
+      # 安装 Redis CLI
+      - name: Install Redis CLI
+        run: sudo apt-get update && sudo apt-get install -y redis-tools
+
+      # 验证 Redis 连接
+      - name: Verify Redis connection
+        run: redis-cli -h 127.0.0.1 -p 6379  ping
+
+      # 使用 Maven 构建项目
+      - name: Build with Maven
+        run: mvn clean package
+
