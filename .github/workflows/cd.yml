@@ -28,7 +28,7 @@ jobs:
         with:
           mysql version: '8.0'
           mysql root password: '123456'    # 使用提供的 MySQL root 密码
-          mysql database: 'letcode'
+          mysql database: 'yuoj'
           host port: 3306                  # 映射主机端口
           container port: 3306             # 容器内的 MySQL 端口
 
