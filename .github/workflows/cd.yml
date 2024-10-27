@@ -82,9 +82,10 @@ jobs:
 
       - name: Setup SSH using PEM
         run: |
+          mkdir -p ~/.ssh  # 手动创建 .ssh 目录
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > deploy-key.pem
           chmod 600 deploy-key.pem
-          ssh-keyscan -H 43.134.114.17 >> ~/.ssh/known_hosts
+          ssh-keyscan -H your-server-ip >> ~/.ssh/known_hosts
           
           # 测试是否能够通过 SSH 连接到服务器
       - name: Test SSH connection
