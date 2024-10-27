@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  upload-to-s3:
+  mvn_package:
     runs-on: ubuntu-latest
 
     steps:
@@ -74,3 +74,8 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
+      # 运行 Bash 脚本文件
+      - name: Run check_file.sh
+        run: |
+          chmod +x ./check_file.sh  # 确保脚本有可执行权限
+          ./scripts/check_file.sh  # 运行脚本
