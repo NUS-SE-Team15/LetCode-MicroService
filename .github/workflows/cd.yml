@@ -77,5 +77,5 @@ jobs:
       # 运行 Bash 脚本文件
       - name: Run check_file.sh
         run: |
-          chmod +x ./check_file.sh  # 确保脚本有可执行权限
+          chmod +x ./scripts/check_file.sh  # 确保脚本有可执行权限
           ./scripts/check_file.sh  # 运行脚本
