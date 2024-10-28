@@ -4,7 +4,8 @@ name: lc
 nodes:
   - role: control-plane
     extraPortMappings:
-      - containerPort: 30000  # 容器中的 NodePort 端口
-        hostPort: 8101       # 宿主机上的端口
+      - containerPort: 30000
+        hostPort: 8101
         protocol: TCP
+  - role: worker
   - role: worker

@@ -14,12 +14,12 @@ spec:
     spec:
       containers:
         - name: nacos
-          image: nacos/nacos-server:v2.2.0-slim  # Nacos 镜像
-          imagePullPolicy: IfNotPresent  # 优先使用本地镜像
+          image: nacos/nacos-server:v2.2.0-slim
+          imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8848  # HTTP 端口
-            - containerPort: 9848  # gRPC 客户端通信端口
-            - containerPort: 9849  # gRPC 服务端间通信端口
+            - containerPort: 8848  # HTTP port
+            - containerPort: 9848  # gRPC port
+            - containerPort: 9849  # gRPC port
           env:
             - name: MODE
               value: standalone  # 单节点模式

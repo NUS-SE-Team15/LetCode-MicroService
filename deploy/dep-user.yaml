@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: user
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: user
@@ -20,7 +20,7 @@ spec:
             - containerPort: 8102  # 容器内部服务监听的端口
           resources:
             requests:
-              cpu: "10m"
+              cpu: 500m
 ---
 apiVersion: v1
 kind: Service

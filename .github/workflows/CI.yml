@@ -47,7 +47,7 @@ jobs:
           host port: 3306                  # 映射主机端口
           container port: 3306             # 容器内的 MySQL 端口
 
-      # 增加等待时间，确保 MySQL 启动
+
       - name: Wait for MySQL to start
         run: sleep 10
 
