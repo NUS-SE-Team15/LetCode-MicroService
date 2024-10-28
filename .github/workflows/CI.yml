@@ -3,10 +3,10 @@ name: Java CI with Maven, MySQL, Redis Setup, and Snyk Check
 on:
   push:
     branches:
-      - "main"
+      - "k8s"
   pull_request:
     branches:
-      - "main"
+      - "k8s"
 
 defaults:
   run:
