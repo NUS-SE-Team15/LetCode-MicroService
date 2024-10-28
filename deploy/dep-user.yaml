@@ -15,7 +15,7 @@ spec:
       containers:
         - name: yuoj-backend-user-service
           image: lc-yuoj-backend-user-service  # 改成你的镜像名称
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8102  # 容器内部服务监听的端口
           resources:

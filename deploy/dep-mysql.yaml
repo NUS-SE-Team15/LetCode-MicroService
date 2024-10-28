@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: mysql
 spec:
-  replicas: 1  # MySQL 单实例
+  replicas: 1
   selector:
     matchLabels:
       app: mysql
@@ -14,22 +14,25 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: mysql:8  # 使用 MySQL 8 镜像
+          image: mysql:8
+          imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 3306  # MySQL 内部监听的端口
+            - containerPort: 3306
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: "123456"  # 设置 root 用户密码
+              value: "123456"
           volumeMounts:
             - name: mysql-persistent-storage
-              mountPath: /var/lib/mysql  # MySQL 数据目录的持久化路径
+              mountPath: /var/lib/mysql
+            - name: mysql-init-scripts
+              mountPath: /docker-entrypoint-initdb.d  # 挂载初始化脚本的路径
       volumes:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
-            claimName: mysql-pvc  # PVC 用于持久化存储
+            claimName: mysql-pvc
         - name: mysql-init-scripts
           configMap:
-            name: mysql-init-scripts  # 使用 ConfigMap 挂载初始化脚本
+            name: mysql-init-scripts
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -37,10 +40,10 @@ metadata:
   name: mysql-pvc
 spec:
   accessModes:
-    - ReadWriteOnce  # 只能被一个节点挂载
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi  # 请求 10Gi 的存储空间
+      storage: 10Gi
 ---
 apiVersion: v1
 kind: Service
@@ -48,12 +51,12 @@ metadata:
   name: mysql
 spec:
   selector:
-    app: mysql  # 与 Deployment 中的标签匹配
+    app: mysql
   ports:
     - protocol: TCP
-      port: 3306  # 服务暴露的端口
-      targetPort: 3306  # Pod 内 MySQL 监听的端口
-  type: ClusterIP  # 默认类型，仅集群内部访问
+      port: 3306
+      targetPort: 3306
+  type: ClusterIP
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -61,6 +64,7 @@ metadata:
   name: mysql-init-scripts
 data:
   init.sql: |
+    -- 创建库
     create database if not exists yuoj;
     
     -- 切换库

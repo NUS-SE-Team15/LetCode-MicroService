@@ -15,24 +15,25 @@ spec:
       containers:
         - name: nacos
           image: nacos/nacos-server:v2.2.0-slim  # Nacos 镜像
-          imagePullPolicy: IfNotPresent  # 镜像拉取策略
+          imagePullPolicy: IfNotPresent  # 优先使用本地镜像
           ports:
-            - containerPort: 8848  # 暴露的端口
+            - containerPort: 8848  # HTTP 端口
+            - containerPort: 9848  # gRPC 客户端通信端口
+            - containerPort: 9849  # gRPC 服务端间通信端口
           env:
             - name: MODE
               value: standalone  # 单节点模式
             - name: PREFER_HOST_MODE
-              value: hostname  # 使用hostname模式
+              value: hostname  # 使用 hostname 模式
             - name: TZ
               value: Asia/Shanghai  # 设置时区
           volumeMounts:
-            - name: nacos-persistent-storage
-              mountPath: /home/nacos/data  # 持久化数据存储路径
+            - name: nacos-data
+              mountPath: /home/nacos/data  # 持久化数据路径
       volumes:
-        - name: nacos-persistent-storage
-          hostPath:
-            path: /data/nacos  # 宿主机上的持久化目录，类似 Docker Compose 中的本地挂载
-            type: DirectoryOrCreate  # 如果目录不存在则创建
+        - name: nacos-data
+          emptyDir: {}  # 使用 emptyDir 临时存储，生产环境可改为 PersistentVolume
+
 ---
 apiVersion: v1
 kind: Service
@@ -42,7 +43,16 @@ spec:
   selector:
     app: nacos
   ports:
-    - protocol: TCP
+    - name: http  # 为端口 8848 添加名称
+      protocol: TCP
       port: 8848
       targetPort: 8848
-  type: ClusterIP  # 或 NodePort/LoadBalancer, 根据你的需求
+    - name: grpc-client  # 为端口 9848 添加名称
+      protocol: TCP
+      port: 9848
+      targetPort: 9848
+    - name: grpc-server  # 为端口 9849 添加名称
+      protocol: TCP
+      port: 9849
+      targetPort: 9849
+  type: ClusterIP

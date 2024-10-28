@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: rabbitmq
-          image: rabbitmq:management  # 使用 RabbitMQ 带管理界面的镜像
-          imagePullPolicy: Always
+          image: rabbitmq:3.12.6-management # 使用 RabbitMQ 带管理界面的镜像
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5672  # RabbitMQ 服务监听的端口
             - containerPort: 15672  # RabbitMQ 管理界面的端口

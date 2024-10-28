@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: redis
-          image: redis:latest  # 使用最新的 Redis 镜像
+          image: redis:6  # 使用最新的 Redis 镜像
+          imagePullPolicy: IfNotPresent  # 使用本地镜像，不拉取
           ports:
             - containerPort: 6379  # Redis 默认端口
           volumeMounts:
