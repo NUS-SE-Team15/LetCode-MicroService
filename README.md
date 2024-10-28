@@ -1,5 +1,5 @@
 # How to use
-please make sure u already installed kind on ur laptop
+using go to install kind
 ```shell
 go install sigs.k8s.io/kind@v0.20.0
 ```
@@ -12,7 +12,7 @@ create cluster, just need to run this one time
 ```shell
 ./scripts/create_k8s_cluster.sh
 ```
-final step to run
+final step to run, make sure your redis is listening port 6379 with no password
 ```shell
 ./init_lc_in_k8s.sh
 ```
